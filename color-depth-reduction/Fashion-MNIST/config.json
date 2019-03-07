@@ -1,0 +1,33 @@
+{
+  "_comment": "===== MODEL CONFIGURATION =====",
+  "model_dir": "models/disc_adv_trained",
+
+  "_comment": "===== TRAINING CONFIGURATION =====",
+  "random_seed": 4557077,
+  "max_num_training_steps": 100000,
+  "num_output_steps": 100,
+  "num_summary_steps": 100,
+  "num_checkpoint_steps": 300,
+  "training_batch_size": 50,
+  "use_pretrain": false,
+  "base_model_dir": "models/adv_trained",
+
+  "_comment": "===== EVAL CONFIGURATION =====",
+  "num_eval_examples": 10000,
+  "eval_batch_size": 200,
+  "eval_on_cpu": false,
+
+  "_comment": "=====ADVERSARIAL EXAMPLES CONFIGURATION=====",
+  "epsilon": 0.3,
+  "attack_steps": 100,
+  "delta": 0.01,
+  "alpha": 10,
+  "random_start": true,
+  "loss_func": "xent",
+  "store_adv_path": "attack.npy",
+
+  "_comment": "===== DISCRETIZATION CONFIGURATION=====",
+  "codes_path": "codes.npy",
+  "discretize": true,
+  "k": 2
+}

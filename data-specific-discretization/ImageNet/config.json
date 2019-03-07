@@ -1,0 +1,25 @@
+{
+  "_comment": "===== MODEL CONFIGURATION =====",
+  "model_type": "nat",
+
+  "_comment": "===== DATASET CONFIGURATION =====",
+  "data_path": "dataset",
+
+  "_comment": "===== EVAL CONFIGURATION =====",
+  "num_eval_examples": 1000,
+  "eval_batch_size": 10,
+
+  "_comment": "=====ADVERSARIAL EXAMPLES CONFIGURATION=====",
+  "epsilon": 4.0,
+  "attack_steps": 10,
+  "step_size": 1.0,
+  "alpha": 0.1,
+  "random_start": true,
+  "loss_func": "xent",
+  "store_adv_path": "attack.npy",
+
+  "_comment": "===== DISCRETIZATION CONFIGURATION=====",
+  "codes_path": "codes.npy",
+  "discretize": true,
+  "k": 8
+}
