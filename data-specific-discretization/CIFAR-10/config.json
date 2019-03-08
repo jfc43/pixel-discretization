@@ -35,6 +35,7 @@
 
   "_comment": "===== DISCRETIZATION CONFIGURATION=====",
   "codes_path": "codes.npy",
+  "cluster_algorithm": "KDE",
   "discretize": true,
   "k": 8,
   "r": 16

@@ -1,6 +1,13 @@
 import numpy as np
 import cifar10_input
 import json
+import matlab.engine
+
+eng = matlab.engine.start_matlab('-nodisplay')
+
+def KM(points, k):
+    idx, C = eng.kmedoids(matlab.double(points.tolist()),k,'Distance','chebychev',nargout=2)
+    return np.array(C)
 
 def KDEProximate(points, r, k):
     n = points.shape[0]
@@ -25,14 +32,23 @@ def KDEProximate(points, r, k):
 with open('config.json') as config_file:
   config = json.load(config_file)
 
-k = config['k']
-r = config['r']
 codes_path = config['codes_path']
 data_path = config['data_path']
+cluster_algorithm = config['cluster_algorithm']
 
 cifar10 = cifar10_input.CIFAR10Data(data_path)
 
 images = cifar10.train_data.xs.astype(float)
 points = images.reshape((-1,3))
-codes = KDEProximate(points,r=r,k=k)
+
+if cluster_algorithm == 'KDE':
+    k = config['k']
+    r = config['r']
+    codes = KDEProximate(points,r=r,k=k)
+elif cluster_algorithm == 'KM':
+    k = config['k']
+    codes = KM(points, k)
+else:
+    print('Not supported clustering algorithm')
+
 np.save(codes_path, codes)

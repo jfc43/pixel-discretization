@@ -1,6 +1,13 @@
 import numpy as np
 from tensorflow.examples.tutorials.mnist import input_data
 import json
+import matlab.engine
+
+eng = matlab.engine.start_matlab('-nodisplay')
+
+def KM(points, k):
+    idx, C = eng.kmedoids(matlab.double(points.tolist()),k,'Distance','chebychev',nargout=2)
+    return np.array(C)
 
 def KDEProximate(points, r, k):
     n = points.shape[0]
@@ -27,15 +34,22 @@ def KDEProximate(points, r, k):
 with open('config.json') as config_file:
   config = json.load(config_file)
 
-k = config['k']
-r = config['r']
 codes_path = config['codes_path']
+cluster_algorithm = config['cluster_algorithm']
 
 mnist = input_data.read_data_sets('MNIST_data', one_hot=False)
 
 images = mnist.train.images.astype(float)
 points = images.reshape((-1,1))
-codes = KDEProximate(points,r=r,k=k)
 
-print('# codes: %d'%codes.shape[0])
+if cluster_algorithm == 'KDE':
+    k = config['k']
+    r = config['r']
+    codes = KDEProximate(points,r=r,k=k)
+elif cluster_algorithm == 'KM':
+    k = config['k']
+    codes = KM(points, k)
+else:
+    print('Not supported clustering algorithm')
+
 np.save(codes_path,codes)
