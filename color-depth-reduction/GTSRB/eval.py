@@ -22,7 +22,6 @@ import gtsrb_input
 from model import Model
 from pgd_attack import LinfPGDAttack
 from CW_attack import CWAttack
-from sklearn.cluster import KMeans
 
 with open('config.json') as config_file:
   config = json.load(config_file)

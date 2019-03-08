@@ -18,7 +18,6 @@ from model import Model
 import gtsrb_input
 from pgd_attack import LinfPGDAttack
 from CW_attack import CWAttack
-from sklearn.cluster import KMeans
 import re
 
 with open('config.json') as config_file:

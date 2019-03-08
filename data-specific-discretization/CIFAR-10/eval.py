@@ -20,8 +20,7 @@ import tensorflow as tf
 import cifar10_input
 from model import Model
 from pgd_attack import LinfPGDAttack
-from CW_attack import CWAttack
-from sklearn.cluster import KMeans
+from CW_attack import CWAttacks
 
 with open('config.json') as config_file:
   config = json.load(config_file)

@@ -1,7 +1,5 @@
 import tensorflow as tf
 import numpy as np
-from sklearn.neighbors.kde import KernelDensity
-from sklearn.neighbors import KDTree
 from util import preprocess
 
 class CWAttack:
