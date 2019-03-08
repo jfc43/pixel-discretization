@@ -13,7 +13,7 @@ from timeit import default_timer as timer
 
 import tensorflow as tf
 import numpy as np
-from sklearn.neighbors import KDTree
+from util import preprocess
 
 from model import Model
 import gtsrb_input
@@ -48,18 +48,6 @@ discretize = config['discretize']
 
 if discretize:
   codes = np.load(codes_path)
-
-def preprocess(images0):
-  if not discretize:
-    return images0
-  images = np.copy(images0).astype(float)
-  kd = KDTree(global_codes, metric='infinity')
-  new_images = []
-  for img in images:
-    points = img.reshape(-1,1)
-    inds = np.squeeze(kd.query(points,return_distance=False))
-    new_images.append(global_codes[inds].reshape(img.shape))
-  return np.array(new_images)
 
 # Setting up the data and the model
 raw_cifar = gtsrb_input.GTSRBData(data_path)
@@ -125,7 +113,8 @@ with tf.Session(config = tf_config) as sess:
   for ii in range(curr_step, max_num_training_steps):
     x_batch, y_batch = cifar.train_data.get_next_batch(batch_size,
                                                        multiple_passes=True)
-    x_batch_ = preprocess(x_batch)
+    if discretize:
+      x_batch_ = preprocess(x_batch, codes)
     # Compute Adversarial Perturbations
 
     nat_dict = {model.x_input: x_batch_,

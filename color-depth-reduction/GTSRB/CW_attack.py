@@ -1,6 +1,6 @@
 import tensorflow as tf
 import numpy as np
-from sklearn.neighbors import KDTree
+from util import preprocess
 
 class CWAttack:
     def __init__(self, model, num_steps, step_size, epsilon, codes, batch_size, alpha):
@@ -45,16 +45,6 @@ class CWAttack:
         self.new_vars = [x for x in end_vars if x.name not in start_vars]
         self.new_vars_initializer = tf.variables_initializer(self.new_vars)
 
-    def preprocess(self, images0):
-        images = np.copy(images0).astype(float)
-        kd = KDTree(self.codes, metric='infinity')
-        new_images = []
-        for img in images:
-            points = img.reshape(-1,1)
-            inds = np.squeeze(kd.query(points,return_distance=False))
-            new_images.append(self.codes[inds].reshape(img.shape))
-        return np.array(new_images)
-
     def perturb(self, x, y, sess):
         sess.run(self.new_vars_initializer)
         sess.run(self.xs.initializer)
@@ -64,7 +54,7 @@ class CWAttack:
         for i in range(self.num_steps):
             imgs = sess.run(self.xs)
             points = imgs.reshape((-1,3))
-            t = self.preprocess(imgs)
+            t = preprocess(imgs, self.codes)
             sess.run(self.train, feed_dict={self.ys: y,
                                             self.z: t})
             sess.run(self.do_clip_xs,

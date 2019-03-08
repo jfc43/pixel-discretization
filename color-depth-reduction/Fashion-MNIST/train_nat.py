@@ -17,7 +17,7 @@ from tensorflow.examples.tutorials.mnist import input_data
 from model import Model
 from CW_attack import CWAttack
 from strong_pgd_attack import LinfPGDAttack
-from sklearn.neighbors import KDTree
+from util import preprocess
 import re
 
 with open('config.json') as config_file:
@@ -41,18 +41,6 @@ discretize = config['discretize']
 
 if discretize:
   codes = np.load(codes_path)
-
-def preprocess(images0):
-  if not discretize:
-    return images0
-  images = np.copy(images0).astype(float)
-  kd = KDTree(global_codes, metric='infinity')
-  new_images = []
-  for img in images:
-    points = img.reshape(-1,1)
-    inds = np.squeeze(kd.query(points,return_distance=False))
-    new_images.append(global_codes[inds].reshape(img.shape))
-  return np.array(new_images)
 
 # Setting up the data and the model
 mnist = input_data.read_data_sets('data/fashion', one_hot=False)
@@ -106,7 +94,10 @@ with tf.Session(config = tf_config) as sess:
   for ii in range(curr_step, max_num_training_steps):
     x_batch, y_batch = mnist.train.next_batch(batch_size)
 
-    x_batch_ = preprocess(x_batch)
+    if discretize:
+      x_batch_ = preprocess(x_batch, codes)
+    else:
+      x_batch_ = x_batch
 
     nat_dict = {model.x_input: x_batch_,
                 model.y_input: y_batch}
