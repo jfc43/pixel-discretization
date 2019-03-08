@@ -10,8 +10,6 @@ from __future__ import print_function
 import tensorflow as tf
 import numpy as np
 
-import cifar10_input
-
 class LinfPGDAttack:
   def __init__(self, model, epsilon, num_steps, step_size, random_start, loss_func):
     """Attack parameter initialization. The attack performs k steps of
@@ -27,7 +25,7 @@ class LinfPGDAttack:
       loss = model.xent
     elif loss_func == 'cw':
       label_mask = tf.one_hot(model.y_input,
-                              10,
+                              43,
                               on_value=1.0,
                               off_value=0.0,
                               dtype=tf.float32)

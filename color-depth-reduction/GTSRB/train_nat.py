@@ -17,16 +17,13 @@ from util import preprocess
 
 from model import Model
 import gtsrb_input
-from pgd_attack import LinfPGDAttack
-from CW_attack import CWAttack
-from sklearn.cluster import KMeans
 import re
 
 with open('config.json') as config_file:
   config = json.load(config_file)
 
 # Setting up training parameters
-tf.set_random_seed(config['random_seed'])
+tf.set_random_seed(config['tf_random_seed'])
 np.random.seed(config['np_random_seed'])
 
 max_num_training_steps = config['max_num_training_steps']
@@ -43,14 +40,14 @@ model_dir = config['model_dir']
 base_model_dir = config['base_model_dir']
 use_pretrain = config['use_pretrain']
 loss_func = config['loss_func']
-codes_path = config['condes_path']
+codes_path = config['codes_path']
 discretize = config['discretize']
 
 if discretize:
   codes = np.load(codes_path)
 
 # Setting up the data and the model
-raw_cifar = gtsrb_input.GTSRBData(data_path)
+raw_gtsrb = gtsrb_input.GTSRBData(data_path)
 global_step = tf.contrib.framework.get_or_create_global_step()
 model = Model(mode='train')
 
@@ -79,11 +76,11 @@ if not os.path.exists(model_dir):
 # - eval of different runs
 
 saver = tf.train.Saver(max_to_keep=3)
-tf.summary.scalar('accuracy adv train', model.accuracy)
-tf.summary.scalar('accuracy adv', model.accuracy)
-tf.summary.scalar('xent adv train', model.xent / batch_size)
-tf.summary.scalar('xent adv', model.xent / batch_size)
-tf.summary.image('images adv train', model.x_input)
+tf.summary.scalar('accuracy nat train', model.accuracy)
+tf.summary.scalar('accuracy nat', model.accuracy)
+tf.summary.scalar('xent nat train', model.xent / batch_size)
+tf.summary.scalar('xent nat', model.xent / batch_size)
+tf.summary.image('images nat train', model.x_input)
 merged_summaries = tf.summary.merge_all()
 
 # keep the configuration file with the model for reproducibility
@@ -94,7 +91,7 @@ tf_config.gpu_options.allow_growth=True
 
 with tf.Session(config = tf_config) as sess:
   # initialize data augmentation
-  cifar = gtsrb_input.AugmentedGTSRBData(raw_cifar, sess, model)
+  gtsrb = gtsrb_input.AugmentedGTSRBData(raw_gtsrb, sess, model)
 
   # Initialize the summary writer, global variables, and our time counter.
   summary_writer = tf.summary.FileWriter(model_dir, sess.graph)
@@ -111,19 +108,21 @@ with tf.Session(config = tf_config) as sess:
   training_time = 0.0
   # Main training loop
   for ii in range(curr_step, max_num_training_steps):
-    x_batch, y_batch = cifar.train_data.get_next_batch(batch_size,
+    x_batch, y_batch = gtsrb.train_data.get_next_batch(batch_size,
                                                        multiple_passes=True)
     if discretize:
       x_batch_ = preprocess(x_batch, codes)
-    # Compute Adversarial Perturbations
+    else:
+      x_batch_ = x_batch
 
+    # Compute Adversarial Perturbations
     nat_dict = {model.x_input: x_batch_,
                 model.y_input: y_batch}
 
     # Output to stdout
     if ii % num_output_steps == 0:
-      nat_acc = sess.run(model.accuracy, feed_dict=nat_dict)
-      nat_loss = sess.run(model.xent, feed_dict=nat_dict)
+      nat_acc, nat_loss = sess.run([model.accuracy, model.xent], feed_dict=nat_dict)
+
       print('Step {}:    ({})'.format(ii, datetime.now()))
       print('    training nat accuracy {:.4}%, loss {:.4}'.format(nat_acc * 100, nat_loss))
       if ii != curr_step:

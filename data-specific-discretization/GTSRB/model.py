@@ -97,7 +97,7 @@ class Model(object):
       x = self._global_avg_pool(x)
 
     with tf.variable_scope('logit', reuse=tf.AUTO_REUSE):
-      pre_softmax = self._fully_connected(x, 10)
+      pre_softmax = self._fully_connected(x, 43)
     return pre_softmax
 
   def _batch_norm(self, name, x):

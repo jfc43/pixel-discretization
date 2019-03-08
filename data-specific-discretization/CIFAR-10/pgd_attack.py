@@ -10,8 +10,6 @@ from __future__ import print_function
 import tensorflow as tf
 import numpy as np
 
-import cifar10_input
-
 class LinfPGDAttack:
   def __init__(self, model, epsilon, num_steps, step_size, random_start, loss_func):
     """Attack parameter initialization. The attack performs k steps of

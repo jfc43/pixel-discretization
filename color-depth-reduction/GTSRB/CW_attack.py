@@ -31,7 +31,7 @@ class CWAttack:
         self.z = sum(cw)/(sum(w))
 
         logits = self.model.forward(self.z)
-        label_mask = tf.one_hot(self.ys, 10)
+        label_mask = tf.one_hot(self.ys, 43)
         correct_logit = tf.reduce_sum(label_mask * logits, axis=1)
         wrong_logit = tf.reduce_max((1-label_mask) * logits - 1e4*label_mask, axis=1)
         self.loss = (correct_logit - wrong_logit)

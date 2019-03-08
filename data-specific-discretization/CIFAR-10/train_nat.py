@@ -13,7 +13,7 @@ from timeit import default_timer as timer
 
 import tensorflow as tf
 import numpy as np
-from sklearn.neighbors import KDTree
+from util import preprocess
 
 from model import Model
 import cifar10_input
@@ -26,7 +26,7 @@ with open('config.json') as config_file:
   config = json.load(config_file)
 
 # Setting up training parameters
-tf.set_random_seed(config['random_seed'])
+tf.set_random_seed(config['tf_random_seed'])
 np.random.seed(config['np_random_seed'])
 
 max_num_training_steps = config['max_num_training_steps']
@@ -48,18 +48,6 @@ discretize = config['discretize']
 
 if discretize:
   codes = np.load(codes_path)
-
-def preprocess(images0):
-  if not discretize:
-    return images0
-  images = np.copy(images0).astype(float)
-  kd = KDTree(global_codes, metric='infinity')
-  new_images = []
-  for img in images:
-    points = img.reshape(-1,1)
-    inds = np.squeeze(kd.query(points,return_distance=False))
-    new_images.append(global_codes[inds].reshape(img.shape))
-  return np.array(new_images)
 
 # Setting up the data and the model
 raw_cifar = cifar10_input.CIFAR10Data(data_path)
@@ -91,11 +79,11 @@ if not os.path.exists(model_dir):
 # - eval of different runs
 
 saver = tf.train.Saver(max_to_keep=3)
-tf.summary.scalar('accuracy adv train', model.accuracy)
-tf.summary.scalar('accuracy adv', model.accuracy)
-tf.summary.scalar('xent adv train', model.xent / batch_size)
-tf.summary.scalar('xent adv', model.xent / batch_size)
-tf.summary.image('images adv train', model.x_input)
+tf.summary.scalar('accuracy nat train', model.accuracy)
+tf.summary.scalar('accuracy nat', model.accuracy)
+tf.summary.scalar('xent nat train', model.xent / batch_size)
+tf.summary.scalar('xent nat', model.xent / batch_size)
+tf.summary.image('images nat train', model.x_input)
 merged_summaries = tf.summary.merge_all()
 
 # keep the configuration file with the model for reproducibility
@@ -125,7 +113,10 @@ with tf.Session(config = tf_config) as sess:
   for ii in range(curr_step, max_num_training_steps):
     x_batch, y_batch = cifar.train_data.get_next_batch(batch_size,
                                                        multiple_passes=True)
-    x_batch_ = preprocess(x_batch)
+    if discretize:
+      x_batch_ = preprocess(x_batch, codes)
+    else:
+      x_batch_ = x_batch
     # Compute Adversarial Perturbations
 
     nat_dict = {model.x_input: x_batch_,

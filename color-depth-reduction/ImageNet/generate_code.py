@@ -1,4 +1,5 @@
 import numpy as np
+from tensorflow.examples.tutorials.mnist import input_data
 import json
 
 with open('config.json') as config_file:

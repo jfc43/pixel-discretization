@@ -1,6 +1,6 @@
 {
   "_comment": "===== MODEL CONFIGURATION =====",
-  "model_dir": "models/adv_trained",
+  "model_dir": "models/nat_trained",
 
   "_comment": "===== DATASET CONFIGURATION =====",
   "data_path": "data",
@@ -35,6 +35,6 @@
 
   "_comment": "===== DISCRETIZATION CONFIGURATION=====",
   "codes_path": "codes.npy",
-  "discretize": true,
+  "discretize": false,
   "k": 8
 }

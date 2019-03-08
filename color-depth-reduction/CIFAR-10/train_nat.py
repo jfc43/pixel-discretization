@@ -26,7 +26,7 @@ with open('config.json') as config_file:
   config = json.load(config_file)
 
 # Setting up training parameters
-tf.set_random_seed(config['random_seed'])
+tf.set_random_seed(config['tf_random_seed'])
 np.random.seed(config['np_random_seed'])
 
 max_num_training_steps = config['max_num_training_steps']
@@ -79,11 +79,11 @@ if not os.path.exists(model_dir):
 # - eval of different runs
 
 saver = tf.train.Saver(max_to_keep=3)
-tf.summary.scalar('accuracy adv train', model.accuracy)
-tf.summary.scalar('accuracy adv', model.accuracy)
-tf.summary.scalar('xent adv train', model.xent / batch_size)
-tf.summary.scalar('xent adv', model.xent / batch_size)
-tf.summary.image('images adv train', model.x_input)
+tf.summary.scalar('accuracy nat train', model.accuracy)
+tf.summary.scalar('accuracy nat', model.accuracy)
+tf.summary.scalar('xent nat train', model.xent / batch_size)
+tf.summary.scalar('xent nat', model.xent / batch_size)
+tf.summary.image('images nat train', model.x_input)
 merged_summaries = tf.summary.merge_all()
 
 # keep the configuration file with the model for reproducibility
@@ -115,6 +115,8 @@ with tf.Session(config = tf_config) as sess:
                                                        multiple_passes=True)
     if discretize:
       x_batch_ = preprocess(x_batch, codes)
+    else:
+      x_batch_ = x_batch
     # Compute Adversarial Perturbations
 
     nat_dict = {model.x_input: x_batch_,

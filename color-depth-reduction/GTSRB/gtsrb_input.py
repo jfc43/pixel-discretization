@@ -56,6 +56,7 @@ class GTSRBData(object):
             # loop over all images in current annotations file
             for row in gtReader:
                 img = np.array(Image.fromarray(plt.imread(prefix + row[0])).resize((32,32)))
+                intensity = np.mean(img.reshape((-1)))
                 if intensity <50:
                     continue
                 images.append(img) # the 1th column is the filename

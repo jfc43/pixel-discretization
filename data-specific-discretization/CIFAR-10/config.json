@@ -36,5 +36,6 @@
   "_comment": "===== DISCRETIZATION CONFIGURATION=====",
   "codes_path": "codes.npy",
   "discretize": true,
-  "k": 8
+  "k": 8,
+  "r": 16
 }

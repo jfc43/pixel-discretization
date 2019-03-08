@@ -14,7 +14,8 @@ import os
 import sys
 import time
 import numpy as np
-from sklearn.neighbors import KDTree
+from util import preprocess
+
 import tensorflow as tf
 
 import gtsrb_input
@@ -41,18 +42,6 @@ data_path = config['data_path']
 
 if discretize:
   codes = np.load(codes_path)
-
-def preprocess(images0):
-  if not discretize:
-    return images0
-  images = np.copy(images0)
-  kd = KDTree(codes, metric='infinity')
-  new_images = []
-  for img in images:
-    points = img.reshape(-1,1)
-    inds = np.squeeze(kd.query(points,return_distance=False))
-    new_images.append(codes[inds].reshape(img.shape))
-  return np.array(new_images)
 
 if __name__ == '__main__':
   # Set upd the data, hyperparameters, and the model
@@ -86,14 +75,17 @@ if __name__ == '__main__':
       x_batch = cifar.eval_data.xs[bstart:bend, :]
       y_batch = cifar.eval_data.ys[bstart:bend]
 
-      x_batch_ = preprocess(x_batch)
-
       dict_nat = {model.x_input: x_batch_,
                   model.y_input: y_batch}
 
       x_batch_adv = attack.perturb(x_batch, y_batch, sess)
 
-      x_batch_adv_ = preprocess(x_batch_adv)
+      if discretize:
+        x_batch_ = preprocess(x_batch, codes)
+        x_batch_adv_ = preprocess(x_batch_adv, codes)
+      else:
+        x_batch_ = x_batch
+        x_batch_adv_ = x_batch_adv
 
       dict_adv = {model.x_input: x_batch_adv_,
                   model.y_input: y_batch}

@@ -2,6 +2,7 @@ import tensorflow as tf
 import numpy as np
 from sklearn.neighbors.kde import KernelDensity
 from sklearn.neighbors import KDTree
+from util import preprocess
 
 class CWAttack:
     def __init__(self, model, num_steps, step_size, epsilon, codes, batch_size, alpha):
@@ -26,10 +27,11 @@ class CWAttack:
         w = []
         cw = []
         for i in range(codes.shape[0]):
-            wt = tf.exp(-alpha*tf.abs(self.xs-codes[i]))
-            w.append(wt)
-            cw.append(codes[i]*wt)
-        self.z = sum(cw)/sum(w)
+            wt = tf.exp(-alpha*tf.norm(tf.reshape(self.xs,[-1,784,1])-codes[i],ord=np.inf,axis=-1))
+            w.append(tf.expand_dims(wt,axis=-1))
+            cw.append(codes[i]*tf.expand_dims(wt,axis=-1))
+        self.z = sum(cw)/(sum(w))
+        self.z = tf.squeeze(self.z,axis=2)
 
         logits = self.model.forward(self.z)
         label_mask = tf.one_hot(self.ys, 10)
@@ -46,16 +48,6 @@ class CWAttack:
         self.new_vars = [x for x in end_vars if x.name not in start_vars]
         self.new_vars_initializer = tf.variables_initializer(self.new_vars)
 
-    def preprocess(self, images0):
-        images = np.copy(images0).astype(float)
-        kd = KDTree(self.codes, metric='infinity')
-        new_images = []
-        for img in images:
-            points = img.reshape(-1,1)
-            inds = np.squeeze(kd.query(points,return_distance=False))
-            new_images.append(self.codes[inds].reshape(img.shape))
-        return np.array(new_images)
-
     def perturb(self, x, y, sess):
         sess.run(self.new_vars_initializer)
         sess.run(self.xs.initializer)
@@ -65,7 +57,7 @@ class CWAttack:
         for i in range(self.num_steps):
             imgs = sess.run(self.xs)
             points = imgs.reshape((-1,1))
-            t = self.preprocess(imgs)
+            t = preprocess(imgs, self.codes)
             sess.run(self.train, feed_dict={self.ys: y,
                                             self.z: t})
             sess.run(self.do_clip_xs,

@@ -25,7 +25,7 @@ with open('config.json') as config_file:
   config = json.load(config_file)
 
 # Setting up training parameters
-tf.set_random_seed(config['random_seed'])
+tf.set_random_seed(config['tf_random_seed'])
 np.random.seed(config['np_random_seed'])
 
 max_num_training_steps = config['max_num_training_steps']
