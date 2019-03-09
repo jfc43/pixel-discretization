@@ -36,7 +36,7 @@ model_dir = config['model_dir']
 base_model_dir = config['base_model_dir']
 use_pretrain = config['use_pretrain']
 loss_func = config['loss_func']
-codes_path = config['condes_path']
+codes_path = config['codes_path']
 discretize = config['discretize']
 
 if discretize:
