@@ -41,7 +41,7 @@ epsilon = config['epsilon']
 model_dir = config['model_dir']
 base_model_dir = config['base_model_dir']
 use_pretrain = config['use_pretrain']
-delta = config['delta']
+step_size = config['step_size']
 alpha = config['alpha']
 attack_steps = config['attack_steps']
 random_start = config['random_start']
@@ -77,9 +77,9 @@ if not os.path.exists(model_dir):
 
 # Set up adversary
 if discretize:
-  attack = CWAttack(model, attack_steps, delta, epsilon, codes, batch_size, alpha)
+  attack = CWAttack(model, attack_steps, step_size, epsilon, codes, batch_size, alpha)
 else:
-  attack = LinfPGDAttack(model, epsilon, attack_steps, delta, random_start)
+  attack = LinfPGDAttack(model, epsilon, attack_steps, step_size, random_start, loss_func)
 
 # We add accuracy and xent twice so we can easily make three types of
 # comparisons in Tensorboard:
