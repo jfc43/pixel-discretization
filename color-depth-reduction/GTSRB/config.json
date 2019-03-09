@@ -1,6 +1,6 @@
 {
   "_comment": "===== MODEL CONFIGURATION =====",
-  "model_dir": "models/nat_trained",
+  "model_dir": "models/adv_trained",
 
   "_comment": "===== DATASET CONFIGURATION =====",
   "data_path": "data",
