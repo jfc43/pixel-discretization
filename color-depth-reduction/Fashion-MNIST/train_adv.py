@@ -60,7 +60,7 @@ train_step = tf.train.AdamOptimizer(1e-4).minimize(model.xent,
 if discretize:
   attack = CWAttack(model, attack_steps, delta, epsilon, codes, batch_size, alpha)
 else:
-  attack = LinfPGDAttack(model, epsilon, attack_steps, delta, random_start)
+  attack = LinfPGDAttack(model, epsilon, attack_steps, delta, random_start, loss_func)
 
 # Setting up the Tensorboard and checkpoint outputs
 if not os.path.exists(model_dir):
