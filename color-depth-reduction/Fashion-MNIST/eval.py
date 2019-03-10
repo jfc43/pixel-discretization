@@ -40,7 +40,7 @@ if __name__=='__main__':
       attack = CWAttack(model, attack_steps, delta, epsilon, codes, eval_batch_size, alpha)
     else:
       attack = LinfPGDAttack(model, epsilon, attack_steps, delta, random_start, loss_func)
-    
+
     # Iterate over the samples batch-by-batch
     num_batches = int(math.ceil(num_eval_examples / eval_batch_size))
     total_corr_nat = 0
@@ -54,9 +54,6 @@ if __name__=='__main__':
       x_batch = mnist.test.images[bstart:bend, :]
       y_batch = mnist.test.labels[bstart:bend]
 
-      dict_nat = {model.x_input: x_batch_,
-                  model.y_input: y_batch}
-
       x_batch_adv = attack.perturb(x_batch, y_batch, sess)
 
       if discretize:
@@ -66,14 +63,17 @@ if __name__=='__main__':
         x_batch_ = x_batch
         x_batch_adv_ = x_batch_adv
 
+      dict_nat = {model.x_input: x_batch_,
+                    model.y_input: y_batch}
+
       dict_adv = {model.x_input: x_batch_adv_,
                     model.y_input: y_batch}
 
       cur_corr_nat = sess.run(
-                        [model.num_correct],
+                        model.num_correct,
                         feed_dict = dict_nat)
       cur_corr_adv = sess.run(
-                        [model.num_correct],
+                        model.num_correct,
                         feed_dict = dict_adv)
 
       print('batch: %d/%d'%(ibatch+1,num_batches))

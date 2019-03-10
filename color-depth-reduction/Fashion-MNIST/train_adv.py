@@ -56,12 +56,6 @@ model = Model()
 train_step = tf.train.AdamOptimizer(1e-4).minimize(model.xent,
                                                    global_step=global_step)
 
-# Set up adversary
-if discretize:
-  attack = CWAttack(model, attack_steps, delta, epsilon, codes, batch_size, alpha)
-else:
-  attack = LinfPGDAttack(model, epsilon, attack_steps, delta, random_start, loss_func)
-
 # Setting up the Tensorboard and checkpoint outputs
 if not os.path.exists(model_dir):
   os.makedirs(model_dir)
@@ -72,12 +66,11 @@ if not os.path.exists(model_dir):
 # - train of different runs
 # - eval of different runs
 
-saver = tf.train.Saver(max_to_keep=3)
+saver = tf.train.Saver(max_to_keep = 3)
 tf.summary.scalar('accuracy adv train', model.accuracy)
 tf.summary.scalar('accuracy adv', model.accuracy)
 tf.summary.scalar('xent adv train', model.xent / batch_size)
 tf.summary.scalar('xent adv', model.xent / batch_size)
-#tf.summary.image('images adv train', model.x_image)
 merged_summaries = tf.summary.merge_all()
 
 # keep the configuration file with the model for reproducibility
@@ -87,7 +80,6 @@ tf_config = tf.ConfigProto()
 tf_config.gpu_options.allow_growth=True
 
 with tf.Session(config = tf_config) as sess:
-  #saver.restore(sess,pre_model)
   # Initialize the summary writer, global variables, and our time counter.
   summary_writer = tf.summary.FileWriter(model_dir, sess.graph)
 
@@ -101,6 +93,12 @@ with tf.Session(config = tf_config) as sess:
     sess.run(tf.global_variables_initializer())
 
   training_time = 0.0
+
+# Set up adversary
+  if discretize:
+    attack = CWAttack(model, attack_steps, delta, epsilon, codes, batch_size, alpha)
+  else:
+    attack = LinfPGDAttack(model, epsilon, attack_steps, delta, random_start, loss_func)
 
   # Main training loop
   for ii in range(curr_step, max_num_training_steps):
