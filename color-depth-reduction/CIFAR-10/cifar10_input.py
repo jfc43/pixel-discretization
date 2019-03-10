@@ -12,6 +12,7 @@ from __future__ import print_function
 import os
 import pickle
 import sys
+import tensorflow as tf
 version = sys.version_info
 
 import numpy as np

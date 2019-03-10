@@ -6,3 +6,4 @@ models
 __pycache__
 *.pyc
 *.npy
+*.zip

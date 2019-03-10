@@ -13,6 +13,7 @@ from timeit import default_timer as timer
 import tensorflow as tf
 import numpy as np
 from tensorflow.examples.tutorials.mnist import input_data
+from util import preprocess
 
 from model import Model
 from CW_attack import CWAttack
@@ -55,12 +56,6 @@ model = Model()
 train_step = tf.train.AdamOptimizer(1e-4).minimize(model.xent,
                                                    global_step=global_step)
 
-# Set up adversary
-if discretize:
-  attack = CWAttack(model, attack_steps, delta, epsilon, codes, batch_size, alpha)
-else:
-  attack = LinfPGDAttack(model, epsilon, attack_steps, delta, random_start)
-
 # Setting up the Tensorboard and checkpoint outputs
 if not os.path.exists(model_dir):
   os.makedirs(model_dir)
@@ -101,6 +96,12 @@ with tf.Session(config = tf_config) as sess:
 
   training_time = 0.0
 
+  # Set up adversary
+  if discretize:
+    attack = CWAttack(model, attack_steps, delta, epsilon, codes, batch_size, alpha)
+  else:
+    attack = LinfPGDAttack(model, epsilon, attack_steps, delta, random_start)
+
   # Main training loop
   for ii in range(curr_step, max_num_training_steps):
     x_batch, y_batch = mnist.train.next_batch(batch_size)
@@ -112,8 +113,8 @@ with tf.Session(config = tf_config) as sess:
     training_time += end - start
 
     if discretize:
-      x_batch_ = preprocess(x_batch)
-      x_batch_adv_ = preprocess(x_batch_adv)
+      x_batch_ = preprocess(x_batch, codes)
+      x_batch_adv_ = preprocess(x_batch_adv, codes)
     else:
       x_batch_ = x_batch
       x_batch_adv_ = x_batch_adv
