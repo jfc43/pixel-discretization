@@ -75,12 +75,6 @@ model_dir = config['model_dir']
 if not os.path.exists(model_dir):
   os.makedirs(model_dir)
 
-# Set up adversary
-if discretize:
-  attack = CWAttack(model, attack_steps, step_size, epsilon, codes, batch_size, alpha)
-else:
-  attack = LinfPGDAttack(model, epsilon, attack_steps, step_size, random_start, loss_func)
-
 # We add accuracy and xent twice so we can easily make three types of
 # comparisons in Tensorboard:
 # - train vs eval (for a single run)
@@ -106,7 +100,7 @@ with tf.Session(config = tf_config) as sess:
   # Initialize the summary writer, global variables, and our time counter.
   train_summary_writer = tf.summary.FileWriter(os.path.join(model_dir,'train'), sess.graph)
   test_summary_writer = tf.summary.Filewriter(os.path.join(model_dir,'test'), sess.graph)
-  
+
   if use_pretrain:
     checkpoint = tf.train.latest_checkpoint(base_model_dir)
     saver.restore(sess, checkpoint)
@@ -117,6 +111,12 @@ with tf.Session(config = tf_config) as sess:
     sess.run(tf.global_variables_initializer())
 
   training_time = 0.0
+
+  # Set up adversary
+  if discretize:
+    attack = CWAttack(model, attack_steps, step_size, epsilon, codes, batch_size, alpha)
+  else:
+    attack = LinfPGDAttack(model, epsilon, attack_steps, step_size, random_start, loss_func)
 
   # Main training loop
   for ii in range(curr_step, max_num_training_steps):

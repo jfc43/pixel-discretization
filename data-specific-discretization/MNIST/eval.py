@@ -16,7 +16,7 @@ epsilon = config['epsilon']
 model_dir = config['model_dir']
 num_eval_examples = config['num_eval_examples']
 eval_batch_size = config['eval_batch_size']
-delta = config['delta']
+step_size = config['step_size']
 alpha = config['alpha']
 attack_steps = config['attack_steps']
 random_start = config['random_start']
@@ -37,10 +37,10 @@ if __name__=='__main__':
     saver.restore(sess, checkpoint)
 
     if discretize:
-      attack = CWAttack(model, attack_steps, delta, epsilon, codes, eval_batch_size, alpha)
+      attack = CWAttack(model, attack_steps, step_size, epsilon, codes, eval_batch_size, alpha)
     else:
-      attack = LinfPGDAttack(model, epsilon, attack_steps, delta, random_start, loss_func)
-    
+      attack = LinfPGDAttack(model, epsilon, attack_steps, step_size, random_start, loss_func)
+
     # Iterate over the samples batch-by-batch
     num_batches = int(math.ceil(num_eval_examples / eval_batch_size))
     total_corr_nat = 0
@@ -53,7 +53,7 @@ if __name__=='__main__':
 
       x_batch = mnist.test.images[bstart:bend, :]
       y_batch = mnist.test.labels[bstart:bend]
-      
+
       dict_nat = {model.x_input: x_batch_,
                   model.y_input: y_batch}
 

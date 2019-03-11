@@ -1,6 +1,6 @@
 {
   "_comment": "===== MODEL CONFIGURATION =====",
-  "model_dir": "models/adv_trained",
+  "model_dir": "models/disc_32_adv_trained",
 
   "_comment": "===== DATASET CONFIGURATION =====",
   "data_path": "cifar10_data",
@@ -16,7 +16,7 @@
   "step_size_schedule": [[0, 0.1], [40000, 0.01], [60000, 0.001]],
   "weight_decay": 0.0002,
   "momentum": 0.9,
-  "use_pretrain": false,
+  "use_pretrain": true,
   "base_model_dir": "models/adv_trained",
 
   "_comment": "===== EVAL CONFIGURATION =====",
@@ -26,7 +26,7 @@
 
   "_comment": "=====ADVERSARIAL EXAMPLES CONFIGURATION=====",
   "epsilon": 8.0,
-  "attack_steps": 40,
+  "attack_steps": 7,
   "step_size": 2.0,
   "alpha": 0.1,
   "random_start": true,
@@ -34,7 +34,7 @@
   "store_adv_path": "attack.npy",
 
   "_comment": "===== DISCRETIZATION CONFIGURATION=====",
-  "codes_path": "codes.npy",
+  "codes_path": "codes_32.npy",
   "discretize": true,
-  "k": 8
+  "k": 32
 }
