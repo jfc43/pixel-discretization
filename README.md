@@ -66,3 +66,17 @@ Discretization configuration:
 - `k`: number of codes.
 - `r`: the minimum distance between two codes. Used in the data-specific discretization. 
 
+## Example usage
+After cloning the repository you can either train a new network or evaluate/attack one of the pre-trained networks.
+
+#### Training a new network
+* Start training by running:
+```
+python train.py
+```
+
+#### Test the network
+* Evaluate the model trained by running:
+```
+python eval.py
+```
