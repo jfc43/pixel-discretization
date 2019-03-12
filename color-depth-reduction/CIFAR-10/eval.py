@@ -38,6 +38,9 @@ loss_func = config['loss_func']
 codes_path = config['codes_path']
 discretize = config['discretize']
 data_path = config['data_path']
+gpu_device = config['gpu_device']
+
+os.environ["CUDA_VISIBLE_DEVICES"] = gpu_device
 
 if discretize:
   codes = np.load(codes_path)

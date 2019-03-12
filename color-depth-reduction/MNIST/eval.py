@@ -8,6 +8,7 @@ import json
 from util import preprocess
 from model import Model
 from CW_attack import CWAttack
+from pgd_attack import LinfPGDAttack
 
 with open('config.json') as config_file:
   config = json.load(config_file)
@@ -23,6 +24,9 @@ random_start = config['random_start']
 loss_func = config['loss_func']
 codes_path = config['codes_path']
 discretize = config['discretize']
+gpu_device = config['gpu_device']
+
+os.environ["CUDA_VISIBLE_DEVICES"] = gpu_device
 
 if discretize:
   codes = np.load(codes_path)
@@ -54,9 +58,6 @@ if __name__=='__main__':
       x_batch = mnist.test.images[bstart:bend, :]
       y_batch = mnist.test.labels[bstart:bend]
 
-      dict_nat = {model.x_input: x_batch_,
-                  model.y_input: y_batch}
-
       x_batch_adv = attack.perturb(x_batch, y_batch, sess)
 
       if discretize:
@@ -66,6 +67,8 @@ if __name__=='__main__':
         x_batch_ = x_batch
         x_batch_adv_ = x_batch_adv
 
+      dict_nat = {model.x_input: x_batch_,
+                  model.y_input: y_batch}
       dict_adv = {model.x_input: x_batch_adv_,
                     model.y_input: y_batch}
 

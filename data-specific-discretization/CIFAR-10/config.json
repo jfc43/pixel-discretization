@@ -5,6 +5,9 @@
   "_comment": "===== DATASET CONFIGURATION =====",
   "data_path": "cifar10_data",
 
+  "_comment": "===== GPU CONFIGURATION =====",
+  "gpu_device": "0",
+
   "_comment": "===== TRAINING CONFIGURATION =====",
   "tf_random_seed": 451760341,
   "np_random_seed": 216105420,

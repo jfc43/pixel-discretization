@@ -1,6 +1,9 @@
 {
   "_comment": "===== MODEL CONFIGURATION =====",
-  "model_dir": "models/disc_nat_trained",
+  "model_dir": "models/disc_adv_trained",
+
+  "_comment": "===== GPU CONFIGURATION =====",
+  "gpu_device": "0",
 
   "_comment": "===== TRAINING CONFIGURATION =====",
   "random_seed": 4557077,
@@ -19,7 +22,7 @@
 
   "_comment": "=====ADVERSARIAL EXAMPLES CONFIGURATION=====",
   "epsilon": 0.3,
-  "attack_steps": 40,
+  "attack_steps": 100,
   "step_size": 0.01,
   "alpha": 10,
   "random_start": true,

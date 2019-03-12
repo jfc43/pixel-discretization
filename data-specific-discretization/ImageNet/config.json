@@ -2,6 +2,9 @@
   "_comment": "===== MODEL CONFIGURATION =====",
   "model_type": "nat",
 
+  "_comment": "===== GPU CONFIGURATION =====",
+  "gpu_device": "0",
+
   "_comment": "===== DATASET CONFIGURATION =====",
   "data_path": "dataset",
 

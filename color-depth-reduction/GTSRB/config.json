@@ -1,6 +1,9 @@
 {
   "_comment": "===== MODEL CONFIGURATION =====",
-  "model_dir": "models/adv_trained",
+  "model_dir": "models/nat_trained",
+
+  "_comment": "===== GPU CONFIGURATION =====",
+  "gpu_device": "0",
 
   "_comment": "===== DATASET CONFIGURATION =====",
   "data_path": "data",
@@ -8,7 +11,7 @@
   "_comment": "===== TRAINING CONFIGURATION =====",
   "tf_random_seed": 451760341,
   "np_random_seed": 216105420,
-  "max_num_training_steps": 80001,
+  "max_num_training_steps": 70001,
   "num_output_steps": 100,
   "num_summary_steps": 100,
   "num_checkpoint_steps": 1000,

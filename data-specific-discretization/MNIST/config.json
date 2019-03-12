@@ -2,6 +2,9 @@
   "_comment": "===== MODEL CONFIGURATION =====",
   "model_dir": "models/disc_adv_trained",
 
+  "_comment": "===== GPU CONFIGURATION =====",
+  "gpu_device": "0",
+
   "_comment": "===== TRAINING CONFIGURATION =====",
   "random_seed": 4557077,
   "max_num_training_steps": 100000,
