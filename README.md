@@ -32,6 +32,9 @@ It is tested under Ubuntu Linux 16.04.1 and Python 3.6 environment, and requries
 Model configuration:
 - `model_dir`: contains the path to the directory of the currently trained/evaluated model.
 
+GPU configuration:
+- `gpu_device`: which gpu device to use. Should be a string.
+
 Data configuration:
 - `data_path`: contains the path to the directory of dataset. 
 
