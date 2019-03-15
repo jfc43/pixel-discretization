@@ -78,12 +78,6 @@ model_dir = config['model_dir']
 if not os.path.exists(model_dir):
   os.makedirs(model_dir)
 
-# Set up adversary
-if discretize:
-  attack = CWAttack(model, attack_steps, step_size, epsilon, codes, batch_size, alpha)
-else:
-  attack = LinfPGDAttack(model, epsilon, attack_steps, step_size, random_start, loss_func)
-
 # We add accuracy and xent twice so we can easily make three types of
 # comparisons in Tensorboard:
 # - train vs eval (for a single run)
@@ -119,6 +113,12 @@ with tf.Session(config = tf_config) as sess:
     sess.run(tf.global_variables_initializer())
 
   training_time = 0.0
+
+  # Set up adversary
+  if discretize:
+    attack = CWAttack(model, attack_steps, step_size, epsilon, codes, batch_size, alpha)
+  else:
+    attack = LinfPGDAttack(model, epsilon, attack_steps, step_size, random_start, loss_func)
 
   # Main training loop
   for ii in range(curr_step, max_num_training_steps):
