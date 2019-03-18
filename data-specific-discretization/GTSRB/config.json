@@ -23,7 +23,7 @@
   "base_model_dir": "models/adv_trained",
 
   "_comment": "===== EVAL CONFIGURATION =====",
-  "num_eval_examples": 10000,
+  "num_eval_examples": 8900,
   "eval_batch_size": 100,
   "eval_on_cpu": false,
 
