@@ -1,9 +1,17 @@
 import numpy as np
 import gtsrb_input
 import json
-import matlab.engine
 
-eng = matlab.engine.start_matlab('-nodisplay')
+with open('config.json') as config_file:
+  config = json.load(config_file)
+
+codes_path = config['codes_path']
+data_path = config['data_path']
+cluster_algorithm = config['cluster_algorithm']
+
+if cluster_algorithm == 'KM':
+    import matlab.engine
+    eng = matlab.engine.start_matlab('-nodisplay')
 
 def KM(points, k):
     idx, C = eng.kmedoids(matlab.double(points.tolist()),k,'Distance','chebychev',nargout=2)
@@ -27,14 +35,6 @@ def KDEProximate(points, r, k):
         d = np.linalg.norm(points-points[j],ord=np.inf,axis=1)
         mask[np.where(d<=r)] = 0
     return np.array(codes)
-
-
-with open('config.json') as config_file:
-  config = json.load(config_file)
-
-codes_path = config['codes_path']
-data_path = config['data_path']
-cluster_algorithm = config['cluster_algorithm']
 
 gtsrb = gtsrb_input.GTSRBData(data_path)
 

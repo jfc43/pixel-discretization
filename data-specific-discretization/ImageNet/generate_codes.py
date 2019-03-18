@@ -1,7 +1,17 @@
 import numpy as np
 import os
 from input_data import *
-import matlab.engine
+
+with open('config.json') as config_file:
+  config = json.load(config_file)
+
+codes_path = config['codes_path']
+data_path = config['data_path']
+cluster_algorithm = config['cluster_algorithm']
+
+if cluster_algorithm == 'KM':
+    import matlab.engine
+    eng = matlab.engine.start_matlab('-nodisplay')
 
 eng = matlab.engine.start_matlab('-nodisplay')
 
@@ -27,13 +37,6 @@ def KDEProximate(points, r, k):
         d = np.linalg.norm(points-points[j],ord=np.inf,axis=1)
         mask[np.where(d<=r)] = 0
     return np.array(codes)
-
-with open('config.json') as config_file:
-  config = json.load(config_file)
-
-codes_path = config['codes_path']
-data_path = config['data_path']
-cluster_algorithm = config['cluster_algorithm']
 
 images, labels = load_dev_data(data_path)
 images = images.astype(float)

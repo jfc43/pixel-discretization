@@ -40,6 +40,7 @@ attack_steps = config['attack_steps']
 random_start = config['random_start']
 loss_func = config['loss_func']
 codes_path = config['codes_path']
+data_path = config['data_path']
 discretize = config['discretize']
 gpu_device = config['gpu_device']
 
@@ -53,16 +54,6 @@ model = Model(model_type)
 images, labels = load_test_data(data_path)
 
 saver = tf.train.Saver(slim.get_model_variables())
-
-def preprocess(images0):
-    images = np.copy(images0).astype(float)
-    kd = KDTree(global_codes, metric='infinity')
-    new_images = []
-    for img in images:
-        points = img.reshape(-1,3)
-        inds = np.squeeze(kd.query(points,return_distance=False))
-        new_images.append(global_codes[inds].reshape(img.shape))
-    return np.array(new_images)
 
 if model_type == 'nat':
   model_path = 'models/base_inception_model/inception_v3.ckpt'
@@ -83,7 +74,7 @@ with tf.Session(config=tf_config) as sess:
   total_corr_adv = 0
 
   if discretize:
-    attack = CWAttack(model, num_steps=attack_steps, step_size=step_size, epsilon=epsilon, codes=codes, batch_size=eval_batch_size)
+    attack = CWAttack(model, num_steps=attack_steps, step_size=step_size, epsilon=epsilon, codes=codes, batch_size=eval_batch_size, alpha=alpha)
   else:
     attack = LinfPGDAttack(model, epsilon=epsilon, num_steps=attack_steps, step_size=step_size, random_start=random_start, loss_func=loss_func)
 
@@ -94,9 +85,6 @@ with tf.Session(config=tf_config) as sess:
     x_batch = images[bstart:bend, :]
     y_batch = labels[bstart:bend]
 
-    dict_nat = {model.x_input: x_batch_,
-                model.y_input: y_batch}
-
     x_batch_adv = attack.perturb(x_batch, y_batch, sess)
 
     if discretize:
@@ -105,6 +93,9 @@ with tf.Session(config=tf_config) as sess:
     else:
       x_batch_ = x_batch
       x_batch_adv_ = x_batch_adv
+
+    dict_nat = {model.x_input: x_batch_,
+                model.y_input: y_batch}
 
     dict_adv = {model.x_input: x_batch_adv_,
                 model.y_input: y_batch}
