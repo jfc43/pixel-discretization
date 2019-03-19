@@ -16,7 +16,7 @@ from tensorflow.examples.tutorials.mnist import input_data
 
 from model import Model
 from CW_attack import CWAttack
-from strong_pgd_attack import LinfPGDAttack
+from pgd_attack import LinfPGDAttack
 import re
 
 with open('config.json') as config_file:
