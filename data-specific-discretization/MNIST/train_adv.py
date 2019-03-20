@@ -13,6 +13,7 @@ from timeit import default_timer as timer
 import tensorflow as tf
 import numpy as np
 from tensorflow.examples.tutorials.mnist import input_data
+from util import preprocess
 
 from model import Model
 from CW_attack import CWAttack
@@ -115,8 +116,8 @@ with tf.Session(config = tf_config) as sess:
     training_time += end - start
 
     if discretize:
-      x_batch_ = preprocess(x_batch)
-      x_batch_adv_ = preprocess(x_batch_adv)
+      x_batch_ = preprocess(x_batch, codes)
+      x_batch_adv_ = preprocess(x_batch_adv, codes)
     else:
       x_batch_ = x_batch
       x_batch_adv_ = x_batch_adv

@@ -70,6 +70,7 @@ if __name__ == '__main__':
     total_corr_nat = 0
     total_corr_adv = 0
 
+    print(cifar.eval_data.xs.shape[0])
     for ibatch in range(num_batches):
       bstart = ibatch * eval_batch_size
       bend = min(bstart + eval_batch_size, num_eval_examples)

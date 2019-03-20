@@ -4,6 +4,7 @@ import cv2
 import tensorflow as tf
 from tensorflow.examples.tutorials.mnist import input_data
 import json
+import os
 
 from model import Model
 from CW_attack import CWAttack
@@ -57,9 +58,6 @@ if __name__=='__main__':
       x_batch = mnist.test.images[bstart:bend, :]
       y_batch = mnist.test.labels[bstart:bend]
 
-      dict_nat = {model.x_input: x_batch_,
-                  model.y_input: y_batch}
-
       x_batch_adv = attack.perturb(x_batch, y_batch, sess)
 
       if discretize:
@@ -69,14 +67,17 @@ if __name__=='__main__':
         x_batch_ = x_batch
         x_batch_adv_ = x_batch_adv
 
+      dict_nat = {model.x_input: x_batch_,
+                  model.y_input: y_batch}
+
       dict_adv = {model.x_input: x_batch_adv_,
                     model.y_input: y_batch}
 
       cur_corr_nat = sess.run(
-                        [model.num_correct],
+                        model.num_correct,
                         feed_dict = dict_nat)
       cur_corr_adv = sess.run(
-                        [model.num_correct],
+                        model.num_correct,
                         feed_dict = dict_adv)
 
       print('batch: %d/%d'%(ibatch+1,num_batches))
