@@ -20,7 +20,7 @@ import tensorflow as tf
 import cifar10_input
 from model import Model
 from pgd_attack import LinfPGDAttack
-from CW_attack import CWAttacks
+from CW_attack import CWAttack
 
 with open('config.json') as config_file:
   config = json.load(config_file)
