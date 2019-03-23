@@ -102,7 +102,6 @@ with tf.Session(config = tf_config) as sess:
 
   # Initialize the summary writer, global variables, and our time counter.
   train_summary_writer = tf.summary.FileWriter(os.path.join(model_dir,'train'), sess.graph)
-  test_summary_writer = tf.summary.Filewriter(os.path.join(model_dir,'test'), sess.graph)
 
   if use_pretrain:
     checkpoint = tf.train.latest_checkpoint(base_model_dir)

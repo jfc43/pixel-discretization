@@ -78,9 +78,6 @@ if __name__ == '__main__':
       x_batch = cifar.eval_data.xs[bstart:bend, :]
       y_batch = cifar.eval_data.ys[bstart:bend]
 
-      dict_nat = {model.x_input: x_batch_,
-                  model.y_input: y_batch}
-
       x_batch_adv = attack.perturb(x_batch, y_batch, sess)
 
       if discretize:
@@ -90,6 +87,8 @@ if __name__ == '__main__':
         x_batch_ = x_batch
         x_batch_adv_ = x_batch_adv
 
+      dict_nat = {model.x_input: x_batch_,
+                  model.y_input: y_batch}
       dict_adv = {model.x_input: x_batch_adv_,
                   model.y_input: y_batch}
 
