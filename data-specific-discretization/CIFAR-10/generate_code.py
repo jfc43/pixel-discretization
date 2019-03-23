@@ -47,6 +47,8 @@ if cluster_algorithm == 'KDE':
     codes = KDEProximate(points,r=r,k=k)
 elif cluster_algorithm == 'KM':
     k = config['k']
+    np.random.shuffle(points)
+    points = points[0:1000000]
     codes = KM(points, k)
 else:
     print('Not supported clustering algorithm')
