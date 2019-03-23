@@ -1,6 +1,6 @@
 {
   "_comment": "===== MODEL CONFIGURATION =====",
-  "model_dir": "models/disc_adv_trained",
+  "model_dir": "models/nat_trained",
 
   "_comment": "===== TRAINING CONFIGURATION =====",
   "random_seed": 4557077,
@@ -27,8 +27,8 @@
   "store_adv_path": "attack.npy",
 
   "_comment": "===== DISCRETIZATION CONFIGURATION=====",
-  "codes_path": "codes.npy",
-  "cluster_algorithm": "KDE",
+  "codes_path": "codes_km.npy",
+  "cluster_algorithm": "KM",
   "discretize": true,
   "k": 2,
   "r": 0.3

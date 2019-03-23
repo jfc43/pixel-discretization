@@ -1,6 +1,6 @@
 {
   "_comment": "===== MODEL CONFIGURATION =====",
-  "model_dir": "models/disc_adv_trained",
+  "model_dir": "models/disc_km_2_adv_trained",
 
   "_comment": "===== GPU CONFIGURATION =====",
   "gpu_device": "0",
@@ -12,7 +12,7 @@
   "num_summary_steps": 100,
   "num_checkpoint_steps": 300,
   "training_batch_size": 50,
-  "use_pretrain": false,
+  "use_pretrain": true,
   "base_model_dir": "models/adv_trained",
 
   "_comment": "===== EVAL CONFIGURATION =====",
@@ -22,7 +22,7 @@
 
   "_comment": "=====ADVERSARIAL EXAMPLES CONFIGURATION=====",
   "epsilon": 0.3,
-  "attack_steps": 100,
+  "attack_steps": 40,
   "step_size": 0.01,
   "alpha": 10,
   "random_start": true,
@@ -30,8 +30,8 @@
   "store_adv_path": "attack.npy",
 
   "_comment": "===== DISCRETIZATION CONFIGURATION=====",
-  "codes_path": "codes.npy",
-  "cluster_algorithm": "KDE",
+  "codes_path": "codes_km.npy",
+  "cluster_algorithm": "KM",
   "discretize": true,
   "k": 2,
   "r": 0.3

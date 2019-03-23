@@ -37,9 +37,9 @@
   "store_adv_path": "attack.npy",
 
   "_comment": "===== DISCRETIZATION CONFIGURATION=====",
-  "codes_path": "codes.npy",
-  "cluster_algorithm": "KDE",
+  "codes_path": "codes_km_300.npy",
+  "cluster_algorithm": "KM",
   "discretize": true,
-  "k": 8,
+  "k": 300,
   "r": 16
 }
