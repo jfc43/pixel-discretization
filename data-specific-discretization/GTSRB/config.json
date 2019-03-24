@@ -1,6 +1,6 @@
 {
   "_comment": "===== MODEL CONFIGURATION =====",
-  "model_dir": "models/disc_km_300_adv_trained",
+  "model_dir": "models/disc_300_nat_trained",
 
   "_comment": "===== DATASET CONFIGURATION =====",
   "data_path": "data",
@@ -20,10 +20,10 @@
   "weight_decay": 0.0002,
   "momentum": 0.9,
   "use_pretrain": true,
-  "base_model_dir": "models/adv_trained",
+  "base_model_dir": "models/nat_trained",
 
   "_comment": "===== EVAL CONFIGURATION =====",
-  "num_eval_examples": 10000,
+  "num_eval_examples": 8900,
   "eval_batch_size": 100,
   "eval_on_cpu": false,
 

@@ -1,6 +1,6 @@
 {
   "_comment": "===== MODEL CONFIGURATION =====",
-  "model_dir": "models/disc_16_adv_trained",
+  "model_dir": "models/disc_16_nat_trained",
 
   "_comment": "===== GPU CONFIGURATION =====",
   "gpu_device": "1",
@@ -20,24 +20,24 @@
   "weight_decay": 0.0002,
   "momentum": 0.9,
   "use_pretrain": true,
-  "base_model_dir": "models/adv_trained",
+  "base_model_dir": "models/nat_trained",
 
   "_comment": "===== EVAL CONFIGURATION =====",
-  "num_eval_examples": 10000,
+  "num_eval_examples": 8900,
   "eval_batch_size": 100,
   "eval_on_cpu": false,
 
   "_comment": "=====ADVERSARIAL EXAMPLES CONFIGURATION=====",
-  "epsilon": 8.0,
-  "attack_steps": 7,
-  "step_size": 2.0,
+  "epsilon": 2.0,
+  "attack_steps": 40,
+  "step_size": 1.0,
   "alpha": 0.1,
   "random_start": true,
   "loss_func": "xent",
   "store_adv_path": "attack.npy",
 
   "_comment": "===== DISCRETIZATION CONFIGURATION=====",
-  "codes_path": "codes_16.npy",
-  "discretize": true,
-  "k": 16
+  "codes_path": "codes_32.npy",
+  "discretize": false,
+  "k": 32
 }

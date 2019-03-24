@@ -14,7 +14,7 @@ if cluster_algorithm == 'KM':
     eng = matlab.engine.start_matlab('-nodisplay')
 
 def KM(points, k):
-    idx, C = eng.kmedoids(matlab.double(points.tolist()),k,'Distance','chebychev',nargout=2)
+    idx, C = eng.kmedoids(matlab.double(points.tolist()),k,'Distance','cityblock',nargout=2)
     return np.array(C)
 
 def KDEProximate(points, r, k):
@@ -47,6 +47,8 @@ if cluster_algorithm == 'KDE':
     codes = KDEProximate(points,r=r,k=k)
 elif cluster_algorithm == 'KM':
     k = config['k']
+    np.random.shuffle(points)
+    points = points[0:1000000]
     codes = KM(points, k)
 else:
     print('Not supported clustering algorithm')
