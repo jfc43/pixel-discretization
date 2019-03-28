@@ -14,8 +14,6 @@ if cluster_algorithm == 'KM':
     import matlab.engine
     eng = matlab.engine.start_matlab('-nodisplay')
 
-eng = matlab.engine.start_matlab('-nodisplay')
-
 def KM(points, k):
     idx, C = eng.kmedoids(matlab.double(points.tolist()),k,'Distance','cityblock',nargout=2)
     return np.array(C)
