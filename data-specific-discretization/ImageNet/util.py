@@ -1,7 +1,7 @@
 import numpy as np
 from sklearn.neighbors import KDTree
 
-def preprocess(self, images0, codes):
+def preprocess(images0, codes):
     images = np.copy(images0).astype(float)
     kd = KDTree(codes, metric='infinity')
     new_images = []
