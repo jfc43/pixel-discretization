@@ -38,7 +38,7 @@ def KDEProximate(points, r, k):
         mask[np.where(d<=r)] = 0
     return np.array(codes)
 
-mnist = input_data.read_data_sets('data/fashion', one_hot=False)
+mnist = input_data.read_data_sets('data/fashion', source_url='http://fashion-mnist.s3-website.eu-central-1.amazonaws.com/', one_hot=False)
 
 images = mnist.train.images.astype(float)
 points = images.reshape((-1,1))
