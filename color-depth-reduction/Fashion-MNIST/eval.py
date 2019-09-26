@@ -2,6 +2,7 @@ import numpy as np
 import math
 import cv2
 import tensorflow as tf
+import os
 from tensorflow.examples.tutorials.mnist import input_data
 import json
 
