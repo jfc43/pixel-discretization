@@ -46,7 +46,7 @@ if discretize:
   codes = np.load(codes_path)
 
 # Setting up the data and the model
-mnist = input_data.read_data_sets('data/fashion', one_hot=False)
+mnist = input_data.read_data_sets('data/fashion', source_url='http://fashion-mnist.s3-website.eu-central-1.amazonaws.com/', one_hot=False)
 global_step = tf.contrib.framework.get_or_create_global_step()
 model = Model()
 

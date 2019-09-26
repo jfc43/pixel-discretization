@@ -32,7 +32,7 @@ if discretize:
   codes = np.load(codes_path)
 
 if __name__=='__main__':
-  mnist = input_data.read_data_sets('data/fashion', one_hot=False)
+  mnist = input_data.read_data_sets('data/fashion', source_url='http://fashion-mnist.s3-website.eu-central-1.amazonaws.com/', one_hot=False)
 
   with tf.Session() as sess:
     model = Model()
