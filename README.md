@@ -83,3 +83,19 @@ python train.py
 ```
 python eval.py
 ```
+
+### Citation 
+Please cite our work if you use the codebase: 
+```
+@inproceedings{chen2019towards,
+  title={Towards understanding limitations of pixel discretization against adversarial attacks},
+  author={Chen, Jiefeng and Wu, Xi and Rastogi, Vaibhav and Liang, Yingyu and Jha, Somesh},
+  booktitle={2019 IEEE European Symposium on Security and Privacy (EuroS\&P)},
+  pages={480--495},
+  year={2019},
+  organization={IEEE}
+}
+```
+
+### License
+Please refer to the [LICENSE](LICENSE).
